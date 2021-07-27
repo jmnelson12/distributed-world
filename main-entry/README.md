@@ -3,5 +3,3 @@
 ## Todo
 
 - status endpoint
-- docker setup
-- kubernetes setup
