@@ -1,5 +1,3 @@
 # Main Entry
 
-## Todo
-
-- status endpoint
+All calls will originate from this REST API
