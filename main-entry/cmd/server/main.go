@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	"github.com/jmnelson12/distributed-world/main-entry/internal/server"
 )
 
 func main() {
@@ -31,12 +31,12 @@ func main() {
 }
 
 func run(addr string) (<-chan error, error) {
-	srv, err := newServer(serverConfig{
+	srv, err := server.NewHTTPServer(server.HttpServer{
 		Address: addr,
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("newServer %w", err)
+		return nil, fmt.Errorf("NewHTTPServer %w", err)
 	}
 
 	errC := make(chan error, 1)
@@ -75,26 +75,4 @@ func run(addr string) (<-chan error, error) {
 	}()
 
 	return errC, nil
-}
-
-type serverConfig struct {
-	Address string
-}
-
-func newServer(sc serverConfig) (*http.Server, error) {
-	r := gin.Default()
-
-	r.GET("/status", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status": "ok",
-		})
-	})
-
-	return &http.Server{
-		Addr:         sc.Address,
-		Handler:      r,
-		ReadTimeout:  5 * time.Second,   // max time to read request from the client
-		WriteTimeout: 10 * time.Second,  // max time to write response to the client
-		IdleTimeout:  120 * time.Second, // max time for connections using TCP Keep-Alive
-	}, nil
 }
