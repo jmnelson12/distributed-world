@@ -23,4 +23,4 @@ COPY --from=build /go/bin/server ./bin/server
 
 EXPOSE 8080
 
-CMD ["rest-server"]
+CMD ["server"]
